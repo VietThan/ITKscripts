@@ -1,0 +1,3 @@
+/scratch/thanv/IntenseSlice/build/CMakeFiles/rebuild_cache.dir
+/scratch/thanv/IntenseSlice/build/CMakeFiles/edit_cache.dir
+/scratch/thanv/IntenseSlice/build/CMakeFiles/IntenseSlice.dir
