@@ -11,9 +11,7 @@
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 
-#include "itkExtractImageFilter.h"
-#include "itkPasteImageFilter.h"
-
+#include "itkRescaleIntensityImageFilter.h"
 
 #include <string>
 #include <iostream>
@@ -38,7 +36,7 @@ int main(int argc, char * argv []){
 
 	std::cout << "Starting histogram filter on slices"  << std::endl;
 
-	if (argc > 7){
+	if (argc > 6){
 		std::cout << "too many arguments" << std::endl;
 		return EXIT_FAILURE;
 	}
@@ -54,7 +52,7 @@ int main(int argc, char * argv []){
 	constexpr float intensityMinimum = 0.0;
 	constexpr float intensityMaximum = 255.0;
 	
-	if (argc == 7){
+	if (argc == 6){
 		std::cout << "Accepted input arguments" << std::endl;
 		filename = argv[1];
 		type = argv[2];
@@ -83,7 +81,7 @@ int main(int argc, char * argv []){
 	
 	
 	// setting up reader type
-	using imagePixelType = double;						// double is more precise
+	using imagePixelType = float;						// double is more precise
 	using ImageType = itk::Image< imagePixelType, Dimension>;		// ImageType is used for both input and output
 	using ReaderType = itk::ImageFileReader< ImageType >;
 	
@@ -110,8 +108,15 @@ int main(int argc, char * argv []){
 	auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - begin);
 	std::cout << duration.count() << " milliseconds for reading in the file and creating constants"<<std::endl;
 
-	// get images
+	// get image and region
 	ImageType::Pointer image = reader->GetOutput();
+	ImageType::RegionType region = image->GetLargestPossibleRegion();
+	ImageType::SizeType size = region.GetSize();
+	int width = size[0];
+	int height = size[1];
+
+	if ((x-step)<0 || (x+step)>=width){std::cout<<"step is out of bound x\n";return EXIT_FAILURE;}
+	if ((y-step)<0 || (y+step)>=height){std::cout<<"step is out of bound y\n";return EXIT_FAILURE;}
 
 	// calculating mean
 	imagePixelType totalSum = 0;
@@ -156,6 +161,45 @@ int main(int argc, char * argv []){
 	stop = std::chrono::high_resolution_clock::now();
 	duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - begin);
 	std::cout << duration.count() << " milliseconds for calculating mean and standard deviation"<<std::endl;
+
+	// setting the pixel values
+	for (int i = 0; i < width; ++i){
+		for(int j = 0; j < height; ++j){
+			ImageType::IndexType index = {{ i , j }};
+			imagePixelType curPix = image->GetPixel(index);
+			image->SetPixel(index, (curPix-mean)/stdDev);
+		}
+		if (i>0 && (i%49)==0){
+			stop = std::chrono::high_resolution_clock::now();
+			duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - begin);
+			std::cout << duration.count() << " milliseconds for setting " << i+1 << " columns" << std::endl;
+		}
+	}
+	
+	using RescaleFilterType = itk::RescaleIntensityImageFilter< ImageType, ImageType >;
+  	RescaleFilterType::Pointer rescaleFilter = RescaleFilterType::New();
+  	rescaleFilter->SetInput( image );
+	
+	//rescale to 0 and 255 for output
+	rescaleFilter->SetOutputMinimum(intensityMinimum);
+	rescaleFilter->SetOutputMaximum(intensityMaximum);
+	
+	// write out image
+	writer->SetInput( rescaleFilter->GetOutput() );
+	writer->SetUseCompression(true);
+	
+	try {
+	writer->Update();
+	} catch ( itk::ExceptionObject & error ){
+	std::cerr << "Error: " << error << "\n";
+	return EXIT_FAILURE;
+	}
+
+	
+	stop = std::chrono::high_resolution_clock::now();
+	duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - begin);
+	std::cout << duration.count() << " milliseconds for file written out succesfully"<<std::endl;
+	return EXIT_SUCCESS;
 }
 
 //Creating the input file name for a nifti
