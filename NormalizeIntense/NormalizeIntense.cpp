@@ -11,7 +11,6 @@
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 
-#include "itkRescaleIntensityImageFilter.h"
 
 #include <string>
 #include <iostream>
@@ -81,7 +80,7 @@ int main(int argc, char * argv []){
 	
 	
 	// setting up reader type
-	using imagePixelType = float;						// double is more precise
+	using imagePixelType = float;						// float is ITK acceptable
 	using ImageType = itk::Image< imagePixelType, Dimension>;		// ImageType is used for both input and output
 	using ReaderType = itk::ImageFileReader< ImageType >;
 	
@@ -148,12 +147,12 @@ int main(int argc, char * argv []){
 		for (int j = (y-step); j <= (y+step); ++j){
 			ImageType::IndexType index = {{ i , j }};
 			imagePixelType curPix = image->GetPixel(index);
-			totalSqSum += pow((curPix-mean), 2);
+			totalSqSum += std::pow((curPix-mean), 2);
 		}
 	}	
 
-	imagePixelType variance = totalSqSum/pixelNum;
-	imagePixelType stdDev = sqrt(variance);
+	imagePixelType variance = totalSqSum/(pixelNum-1);
+	imagePixelType stdDev = std::sqrt(variance);
 
 	std::cout << "variance: " << variance << "\n";
 	std::cout << "std.dev.: " << stdDev << "\n";
@@ -167,25 +166,14 @@ int main(int argc, char * argv []){
 		for(int j = 0; j < height; ++j){
 			ImageType::IndexType index = {{ i , j }};
 			imagePixelType curPix = image->GetPixel(index);
-			image->SetPixel(index, (curPix-mean)/stdDev);
-		}
-		if (i>0 && (i%49)==0){
-			stop = std::chrono::high_resolution_clock::now();
-			duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - begin);
-			std::cout << duration.count() << " milliseconds for setting " << i+1 << " columns" << std::endl;
+			image->SetPixel( index, ((curPix-mean)/stdDev) );
+			if (i > 0 && i % 49 == 0 && j >0 && j % 49 == 0){std::cout<< "curPix: " << curPix << "\n" << "newPix: " << (curPix-mean)/stdDev << "\n";}
 		}
 	}
 	
-	using RescaleFilterType = itk::RescaleIntensityImageFilter< ImageType, ImageType >;
-  	RescaleFilterType::Pointer rescaleFilter = RescaleFilterType::New();
-  	rescaleFilter->SetInput( image );
-	
-	//rescale to 0 and 255 for output
-	rescaleFilter->SetOutputMinimum(intensityMinimum);
-	rescaleFilter->SetOutputMaximum(intensityMaximum);
 	
 	// write out image
-	writer->SetInput( rescaleFilter->GetOutput() );
+	writer->SetInput( image );
 	writer->SetUseCompression(true);
 	
 	try {
@@ -198,7 +186,7 @@ int main(int argc, char * argv []){
 	
 	stop = std::chrono::high_resolution_clock::now();
 	duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - begin);
-	std::cout << duration.count() << " milliseconds for file written out succesfully"<<std::endl;
+	std::cout << duration.count() << " milliseconds for file written out succesfully\n"<<std::endl;
 	return EXIT_SUCCESS;
 }
 
