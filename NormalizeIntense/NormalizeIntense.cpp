@@ -167,7 +167,6 @@ int main(int argc, char * argv []){
 			ImageType::IndexType index = {{ i , j }};
 			imagePixelType curPix = image->GetPixel(index);
 			image->SetPixel( index, ((curPix-mean)/stdDev) );
-			if (i > 0 && i % 49 == 0 && j >0 && j % 49 == 0){std::cout<< "curPix: " << curPix << "\n" << "newPix: " << (curPix-mean)/stdDev << "\n";}
 		}
 	}
 	
