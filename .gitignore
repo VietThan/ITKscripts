@@ -1,18 +1,19 @@
-gnore asv files
+#ignore asv files
 *.asv
 
 # ignore .nii files
 *.nii
+*.nii.gz
 
 # ignore data
 data/
 
-# ignore .sh files
+# ignore slurm files
 *.sh
+*.out
+*.log
 
 # ignore output
 output/
-
-# ignore log
-.log
+*.tif
 
