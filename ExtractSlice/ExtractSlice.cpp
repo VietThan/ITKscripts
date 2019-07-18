@@ -36,7 +36,7 @@ int main(int argc, char * argv []){
 
 	std::cout << "Starting extracting a slice"  << std::endl;
 
-	if (argc > 6){
+	if (argc > 5){
 		std::cout << "too many arguments" << std::endl;
 		return EXIT_FAILURE;
 	}
@@ -52,15 +52,15 @@ int main(int argc, char * argv []){
 	constexpr float intensityMinimum = 0.0;
 	constexpr float intensityMaximum = 255.0;
 	
-	if (argc == 4){
+	if (argc == 5){
 		std::cout << "Accepted input arguments" << std::endl;
 		filename = argv[1];
 		outType = argv[2];
 		direction = atoi(argv[3]);
-		slice = atpo(argv[4]);
+		slice = atoi(argv[4]);
 	} else {
 		std::cout << "Not enough arguments, went with default" << std::endl;
-		filename = "volume_250_250_200_rescaled_Hessian_0p8_1p0_250p0_2p0_11p0_10"; 
+		filename = "proj_norm.nii"; 
 		outType = ".tif";
 		direction = 0;
 		slice = 0;
@@ -106,7 +106,7 @@ int main(int argc, char * argv []){
 
 	
 	using ExtractFilter = itk::ExtractImageFilter< InputImageType, OutputImageType >;	
-	ExtractFukter::Pointer extracted = ExtractFilter::New();
+	ExtractFilter::Pointer extracted = ExtractFilter::New();
 	extracted->InPlaceOn();
 	extracted->SetDirectionCollapseToSubmatrix();
 	
@@ -152,8 +152,11 @@ std::string makeInputFileName (const std::string &filename){
 std::string makeOutputFileName (const std::string &filename, const std::string &outType, const int &direction, const int &slice){
 	std::string OutputFileName = "../output/";
 	OutputFileName.append("slice_").append(std::to_string(direction)).append("_");
-	OutputFileName.append(slice).append("_").append(filename);
-	OutputFileName.append(outType);
+	OutputFileName.append(std::to_string(slice)).append("_");
+	std::size_t point = filename.find(".");
+	std::string temp = filename;
+	temp.erase(temp.begin()+point, temp.end());
+	OutputFileName.append(temp).append(outType);
 	return OutputFileName;
 }
 
