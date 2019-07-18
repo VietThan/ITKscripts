@@ -23,7 +23,7 @@ using namespace itk;
 
 //helper functions
 std::string makeInputFileName (const std::string &filename, const std::string &filetype);
-std::string makeOutputFileName (const std::string &filename, const std::string &filetype);
+std::string makeOutputFileName (const std::string &filename, const std::string &filetype, const int &direction);
 
 
 
@@ -33,7 +33,7 @@ std::string makeOutputFileName (const std::string &filename, const std::string &
 // 3 - direction
 int main(int argc, char * argv []){
 
-	std::cout << "Starting histogram filter on slices"  << std::endl;
+	std::cout << "Starting maximum projection on slices"  << std::endl;
 
 	if (argc > 6){
 		std::cout << "too many arguments" << std::endl;
@@ -65,14 +65,14 @@ int main(int argc, char * argv []){
 	}
 
 	std::string inputFileName = makeInputFileName(filename, type);	// input is assumed in ../data/
-	std::string outputFileName = makeOutputFileName(filename, type);
+	std::string outputFileName = makeOutputFileName(filename, type, direction);
 	
 
 	std::cout << "filename: " << inputFileName << "\n";
 	
 	
 	// setting up reader type
-	using imagePixelType = unsigned char;						// float is ITK acceptable
+	using imagePixelType = float;						// float is ITK acceptable
 	using ImageType = itk::Image< imagePixelType, Dimension>;		// ImageType is used for both input and output
 	using ReaderType = itk::ImageFileReader< ImageType >;
 	
@@ -133,10 +133,10 @@ std::string makeInputFileName (const std::string &filename, const std::string &i
 }
 
 
-std::string makeOutputFileName (const std::string &filename, const std::string &filetype){
+std::string makeOutputFileName (const std::string &filename, const std::string &filetype, const int &direction){
 	std::string OutputFileName = "../output/";
-	OutputFileName.append("proj_").append(filename);
-	OutputFileName.append(".png");
+	OutputFileName.append("proj_").append(std::to_string(direction)).append("_").append(filename);
+	OutputFileName.append(".nii");
 	return OutputFileName;
 }
 
