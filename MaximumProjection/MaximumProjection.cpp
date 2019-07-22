@@ -35,7 +35,7 @@ int main(int argc, char * argv []){
 
 	std::cout << "Starting maximum projection on slices"  << std::endl;
 
-	if (argc > 6){
+	if (argc > 4){
 		std::cout << "too many arguments" << std::endl;
 		return EXIT_FAILURE;
 	}

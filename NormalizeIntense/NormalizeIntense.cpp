@@ -25,7 +25,7 @@ std::string makeOutputFileName (const std::string &filename, const std::string &
 
 
 
-// 5 arguments:
+// 6 arguments:
 // 1 - filename
 // 2 - type
 // 3 - x
