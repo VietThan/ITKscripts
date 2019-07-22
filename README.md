@@ -2,9 +2,16 @@
 ## HistogramSlice<br>
 Incomplete. From a 3D volume take out the middle slice (accordance to some direction), and use it to histogram match parallel slices<br>
 ## IntenseSlice<br>
-Complete. Take in two slices of images and compute some regional information based on 2D coordinate inputs
+Complete. Take in two slices of images and compute some regional information based on 2D coordinate inputs.<br>
+Arguments:	./IntenseSlice [filename1] [filename2] [type] [x] [y] [step]<br>
+Default:	./IntenseSlice slice000 slice001 .tif 25 25 15<br>
 ## NormalizeIntense<br>
-Working on. Take out slices of images and then normalize them by regional parameters.<br>
+Complete. Take a 2D slice and then normalize them by regional parameters.<br>
+Working on. Take a 3D volume, work on each slice like above.<br>
+## MaximumProjection<br>
+Complete. Take the maximum value of a direction to output a projection.<br>
+## ExtractSlice<br>
+Complete. extract a 2D slice depending on direction<br>
 ## Useful c3d commands<br>
 c3d slice{000..499}_Norm.tif -tile z -o volume.nii.gz<br>
 c3d Smallfield_OCT_Angiography_Volume_fovea.nii -slice x 0:-1 -oo slice%03d.tif<br>
