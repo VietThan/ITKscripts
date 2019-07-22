@@ -2,7 +2,7 @@
 ## General Information<br>
 ### Useful information about ITK<br>
 Dimensions {x, y. z} corresponds to [0], [1], [2] when workin with ITK arrays that uses those dimensions/directions (index, size etc.)<br>
-Read more about ITK at <a href"https://itk.org/">itk.org</a>
+Read more about ITK at <a href="https://itk.org/">itk.org</a>
 ### Useful information about styles
 For input, when I use `type`, it means the file type associated with `filename`. This was used for ease of access and making output file name. In theory, every script will append useful information about what happened and as such based the output filename  on `filename`.<br>
 If the program runs with more arguments than specified, the program will `EXIT_FAILURE`. If the program runs with less arguments than specified, default arguments will be ran.<br> 
