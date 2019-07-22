@@ -4,9 +4,9 @@ Incomplete. From a 3D volume take out the middle slice (accordance to some direc
 ## IntenseSlice<br>
 Complete. Take in two slices of images and compute some regional information based on 2D coordinate inputs.<br>
 Arguments:<br>
-'./IntenseSlice [filename1] [filename2] [type] [x] [y] [step]'<br>
+>`./IntenseSlice [filename1] [filename2] [type] [x] [y] [step]`<br>
 Default:<br>
-'./IntenseSlice slice000 slice001 .tif 25 25 15'<br>
+>`./IntenseSlice slice000 slice001 .tif 25 25 15`<br>
 ## NormalizeIntense<br>
 Complete. Take a 2D slice and then normalize them by regional parameters.<br>
 Working on. Take a 3D volume, work on each slice like above.<br>
