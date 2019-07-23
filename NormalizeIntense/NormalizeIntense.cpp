@@ -173,7 +173,6 @@ int main(int argc, char * argv []){
 	
 	// write out image
 	writer->SetInput( image );
-	writer->SetUseCompression(true);
 	
 	try {
 	writer->Update();
