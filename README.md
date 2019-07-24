@@ -39,6 +39,8 @@ Complete. extract a 2D slice depending on direction<br>
 c3d slice{000..499}_Norm.tif -tile z -o volume.nii.gz<br>
 c3d Smallfield_OCT_Angiography_Volume_fovea.nii -slice x 0:-1 -oo slice%03d.tif<br>
 c3d volume_250_250_200.nii.gz -stretch 0% 100% 0 255 volume_250_250_200_rescaled.nii.gz<br>
+### Useful ImageMath commands<br>
+ImageMath volume_norm_tif.nii -rescale 0,255 -type float -outfile volume_imagemath.nii<br>
 ### Useful bash commands<br>
 for i in {000..499}; do ./NormalizeIntense slice$i .nii 250 250 200; done<br> 
 
