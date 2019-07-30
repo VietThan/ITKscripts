@@ -1,4 +1,6 @@
-# Collection of ITK scripts for small stuff<br><br>
+# Collection of ITK scripts for small stuff
+<p align="center"><img src="https://itk.org/opensourcelogos/itk.png" width=150></p><br>
+
 ## General Information<br>
 ### Useful information about ITK<br>
 Dimensions {x, y. z} corresponds to [0], [1], [2] when workin with ITK arrays that uses those dimensions/directions (index, size etc.)<br>
