@@ -46,23 +46,33 @@ Default: ```./NormalizeIntense slice000 .tif 25 25 10```
 
 ### MaximumProjection<br>
 Complete. Take the maximum value of a direction to output a projection.<br>
-Arguments:<br>
-`./MaximumProjection [filename] [type] [direction]`<br>
-Default:<br>
-`./MaximumProjection volume .nii.gz 0`<br>
-### ExtractSlice<br>
-Complete. extract a 2D slice depending on direction<br>
-Arguments:<br>
-`./ExtractSlice [filename] [outType] [direction] [slice#]`<br>
-Default:<br>
-`./ExtractSlice proj_norm.nii .tif 0`<br><br>
-## More<br>
-### Useful c3d commands<br>
-c3d slice{000..499)_Norm.tif -tile z -o volume.nii.gz<br>
-c3d Smallfield_OCT_Angiography_Volume_fovea.nii -slice x 0:-1 -oo slice%03d.tif<br>
-(this command seems to have problems) c3d volume_250_250_200.nii.gz -stretch 0% 100% 0 255 volume_250_250_200_rescaled.nii.gz<br>
-### Useful ImageMath commands<br>
-ImageMath volume_norm_tif.nii -rescale 0,255 -type float -outfile volume_imagemath.nii<br>
-### Useful bash commands<br>
-for i in {000..499}; do ./NormalizeIntense slice$i .nii 250 250 200; done<br> 
 
+Arguments: ```./MaximumProjection [filename] [type] [direction]```
+
+Default: ```./MaximumProjection volume .nii.gz 0```
+
+### ExtractSlice
+Complete. extract a 2D slice depending on direction<br>
+
+Arguments: ```./ExtractSlice [filename] [outType] [direction] [slice#]```
+
+Default: ```./ExtractSlice proj_norm.nii .tif 0```
+
+## More
+
+### Useful c3d commands
+* ```c3d slice{000..499)_Norm.tif -tile z -o volume.nii.gz```
+* ```c3d Smallfield_OCT_Angiography_Volume_fovea.nii -slice x 0:-1 -oo slice%03d.tif```
+* ~~```c3d volume_250_250_200.nii.gz -stretch 0% 100% 0 255 volume_250_250_200_rescaled.nii.gz```~~ (This command has problems)
+
+### Useful ImageMath commands
+* ```ImageMath volume_norm_tif.nii -rescale 0,255 -type float -outfile volume_imagemath.nii```
+
+### Useful bash commands
+* ```for i in {000..499}; do ./NormalizeIntense slice$i .nii 250 250 200; done```
+
+## Author and Acknowledgements
+Author: Viet Than, Department of EECS, Vanderbilt University, US.<br>
+Supervisor: Ipek Oguz, Prof. Department of EECS, Vanderbilt University, US.
+
+With the help of the Medical Image Computing Lab.
